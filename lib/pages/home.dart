@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/util/emoticon_face.dart';
 import 'package:flutter_application_1/util/exercise_tile.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -14,6 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex =0;
   int ideal_number = 10;
   int ideal_number_2 = 15;
+  
+  var names = <String> ["Patrick", "Fred", "David", "Max"];
+  int numStudents = 0;
   PageController pageController = PageController();
 
   void onTapped(int index){
@@ -25,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+    numStudents = names.length;
     return Scaffold(
       
       body: PageView(
@@ -35,16 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[900],
           child: SafeArea(
         child: Column(children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
             //Hi Jared
-            Text('Teacher Mode',
+            
+            Padding(padding: EdgeInsets.all(16), child: Text('Teacher Mode',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.bold,
-            ),
+            ))
           ),
           ]),
           /*SizedBox(
@@ -110,74 +113,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                   ),
                   //student list
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      ),
-                    child: Row(children: [
-                      Icon(Icons.favorite),
-                      SizedBox(
-                        width: 12,
-                      ),
-                     ExerciseTile(),
-                    ],)
-                  ),
-                  SizedBox(
-                  height: 15,
-                  ),
-                  //student list
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      ),
-                    child: Row(children: [
-                      Icon(Icons.favorite),
-                      SizedBox(
-                        width: 12,
-                      ),
-                     ExerciseTile(),
-                    ],)
-                  ),
-                  SizedBox(
-                  height: 15,
-                  ),
-                  //student list
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      ),
-                    child: Row(children: [
-                      Icon(Icons.favorite),
-                      SizedBox(
-                        width: 12,
-                      ),
-                     ExerciseTile(),
-                    ],)
-                  ),
-                  SizedBox(
-                  height: 15,
-                  ),
-                  //student list
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      ),
-                    child: Row(children: [
-                      Icon(Icons.favorite),
-                      SizedBox(
-                        width: 12,
-                      ),
-                     ExerciseTile(),
-                    ],)
-                  ),
+                  for (int i = 0; i < numStudents; i++)
+                  Column( children: [
+                    ExerciseTile(names[i], i.toString()),
+                    SizedBox(
+                    height: 15,
+                    )
+                  ]
+                  )
                 ]),
               ),
             ),
@@ -205,86 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Student 1',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Heart Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 2',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Heart Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-           Text(
-                'Student 3',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Heart Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 4',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Heart Rate: '),
+          for (int i = 0; i < numStudents; i++)
+            ChildDisplay(names[i], DisplayType.HeartRate)
         ],
         ),
       ),
@@ -308,86 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Student 1',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Skin Temperature: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 2',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Skin Temperature: '),
-          SizedBox(
-            height: 15,
-          ),
-           Text(
-                'Student 3',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Skin Temperature: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 4',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Skin Temperature: '),
+          for (int i = 0; i < numStudents; i++)
+            ChildDisplay(names[i], DisplayType.SkinTemp)
         ],
         ),
       ),
@@ -431,86 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Student 1',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Pulse Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 2',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text('Pulse Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-           Text(
-                'Student 3',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Pulse Rate: '),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-                'Student 4',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-            height: 15,
-          ),
-          CircularProgressIndicator(
-              value: 5/ideal_number_2, //change to variables input/ideal
-          ),
-          Text('Pulse Rate: '),
+          for (int i = 0; i < numStudents; i++)
+            ChildDisplay(names[i], DisplayType.Pulse)
         ],
         ),
       ),
@@ -524,9 +233,60 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(icon: Icon(Icons.medical_information),label: 'Pulses')
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.grey[400],
-      unselectedItemColor: Colors.blue[900],
+      selectedItemColor: Colors.blue[900],
+      unselectedItemColor: Colors.grey[400],
       onTap: onTapped),
     );
   }
+}
+enum DisplayType {
+  HeartRate,
+  SkinTemp,
+  Pulse,
+}
+class ChildDisplay extends StatelessWidget {
+    String StudentName = "";
+    DisplayType Type = DisplayType.HeartRate;
+    int ideal_number = 10;
+    ChildDisplay(String studentName, DisplayType type, {super.key}) {
+      this.StudentName = studentName;
+      Type = type;
+    }
+    String getType() {
+      switch (Type) {
+        case DisplayType.HeartRate:
+          return "Heart Rate";
+        case DisplayType.Pulse:
+          return "Pulse Rate";
+        case DisplayType.SkinTemp:
+          return "Skin Temperature";
+      }
+    }
+    @override
+    Widget build(BuildContext context) {
+            return Column(
+            children: [ 
+            Text(
+            StudentName,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          CircularProgressIndicator(
+              value: 5/ideal_number, //change to variables input/ideal
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(getType()),
+          SizedBox(
+            height: 15,
+          ),
+          ]);
+}
 }
