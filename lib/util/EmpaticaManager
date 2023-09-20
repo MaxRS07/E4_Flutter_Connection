@@ -1,0 +1,24 @@
+import 'package:empatica_e4link/empatica.dart';
+
+// create a device manager that will handle method calls
+EmpaticaPlugin deviceManager = EmpaticaPlugin();
+
+await deviceManager
+  .authenticateWithAPIKey('APIKEY'); //TODO get api key
+
+
+// first listen to status events before trying to connect
+deviceManager.statusEventSink?.listen((event) async {
+      switch (event.runtimeType) {
+        case UpdateStatus:
+          //the status of the device manager
+          print((event as UpdateStatus).status)
+          break;
+        case DiscoverDevice:
+          await deviceManager.connectDevice((event as DiscoverDevice).device);
+          break;
+      }
+    });
+
+// when status is READY we can start scanning for devices
+await deviceManager.startScanning();

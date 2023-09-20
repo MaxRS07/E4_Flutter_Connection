@@ -1,22 +1,42 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 class ExerciseTile extends StatelessWidget {
   String StudentName = "";
   String DeviceID = "";
+  int nth = 0;
   
-  ExerciseTile(String studentname, String deviceid, {super.key}) {
+  ExerciseTile(String studentname, String deviceid, int Nth, {super.key}) {
     StudentName = studentname;
     DeviceID = deviceid;
+    nth = Nth;
   }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    int column = nth%3;
+    Alignment alignment = Alignment.topLeft;
+    switch (column) {
+      case 1:
+        alignment = Alignment.topLeft;
+        break;
+      case 2:
+        alignment = Alignment.topCenter;
+        break;
+      case 3:
+        alignment = Alignment.topRight;
+        break;
+    }
+    return Container( alignment: Alignment.topLeft, child:
+              Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
+                      
                       ),
+                    height: 72,
+                    width: 250,
                     child: Row(children: [
                       const Icon(Icons.favorite),
                       const SizedBox(
@@ -44,7 +64,7 @@ class ExerciseTile extends StatelessWidget {
                       ),
                     ],
                     ),
-                    
-                  );
+                  )
+    );
   }
 }

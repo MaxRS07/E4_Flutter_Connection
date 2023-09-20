@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  empatica_e4link:
+    dependency: "direct main"
+    description:
+      name: empatica_e4link
+      sha256: "0e177734b77d6cbbe1554c0f5ef89d1d46139c59cd9abc94af3758ec1682a95b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   fake_async:
     dependency: transitive
     description:
@@ -186,3 +194,4 @@ packages:
     version: "0.1.4-beta"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
+  flutter: ">=2.5.0"
