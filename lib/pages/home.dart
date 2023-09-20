@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/util/DisplayUI.dart';
 import 'package:flutter_application_1/util/emoticon_face.dart';
 import 'package:flutter_application_1/util/exercise_tile.dart';
+import 'package:flutter_application_1/util/DisplayUI.dart';
+import 'package:empatica_e4link/empatica.dart';
+
+// create a device manager that will handle method calls
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -28,6 +30,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    EmpaticaPlugin deviceManager = EmpaticaPlugin();
+
+  deviceManager.authenticateWithAPIKey('your api key goes ');
+
+// first listen to status events before trying to connect
+  deviceManager.statusEventSink?.listen((event) async {
+      switch (event.runtimeType) {
+        case UpdateStatus:
+          //the status of the device manager
+          print((event as UpdateStatus).status);
+          break;
+        case DiscoverDevice:
+          await deviceManager.connectDevice((event as DiscoverDevice).device);
+          break;
+      }
+    });
+
+// when status is READY we can start scanning for devices
+    deviceManager.startScanning();
     numStudents = names.length;
     return Scaffold(
       
@@ -116,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   //student list
                   for (int i = 0; i < numStudents; i++)
                   Column( children: [
-                    ExerciseTile(names[i], i.toString()),
+                    ExerciseTile(names[i], i.toString(), i),
                     SizedBox(
                     height: 15,
                     )
@@ -134,13 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[100],
           child: SafeArea(
         child: Column(children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
-            Padding(
-              padding: EdgeInsets.all(10), 
-              child:
             Text('Heart Rate Details',
             style: TextStyle(
               color: Colors.black,
@@ -148,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-            ),
           ]),
           SizedBox(
             height: 20,
@@ -167,9 +184,6 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
-            Padding(
-              padding: EdgeInsets.all(10), 
-              child:
             Text('Skin Temperature Details',
             style: TextStyle(
               color: Colors.black,
@@ -177,7 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-            ),
           ]),
           SizedBox(
             height: 20,
@@ -215,17 +228,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            Padding(
-              padding: EdgeInsets.all(10), 
-              child:
+            //Hi Jared
             Text('Pulse Rate Details',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
-          )
-          )
+          ),
           ]),
           SizedBox(
             height: 20,
@@ -251,4 +261,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

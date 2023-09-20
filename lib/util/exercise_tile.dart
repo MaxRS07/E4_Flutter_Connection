@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 class ExerciseTile extends StatelessWidget {
@@ -17,17 +15,18 @@ class ExerciseTile extends StatelessWidget {
     int column = nth%3;
     Alignment alignment = Alignment.topLeft;
     switch (column) {
-      case 1:
+      case 0:
         alignment = Alignment.topLeft;
         break;
-      case 2:
+      case 1:
         alignment = Alignment.topCenter;
         break;
-      case 3:
+      case 2:
         alignment = Alignment.topRight;
         break;
     }
-    return Container( alignment: Alignment.topLeft, child:
+    return Container(alignment: alignment,
+                    child:
               Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
