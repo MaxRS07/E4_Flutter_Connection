@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/util/emoticon_face.dart';
 import 'package:flutter_application_1/util/exercise_tile.dart';
@@ -17,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int ideal_number = 10;
   int ideal_number_2 = 15;
   
-  var names = <String> ["Patrick", "Fred", "David", "Max"];
-  int numStudents = 0;
+  var names = <String> ["Patrick", "Fred", "David", "Max", "Aidan", "Eli", "Magnus"];
+  int numStudents = 7;
   PageController pageController = PageController();
 
   void onTapped(int index){
@@ -121,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Center(
                 child: Column(
                   children:[
-                  Row(
+                  const Row(
                     children: [
                       Text('Students',
                       style: TextStyle(
@@ -135,14 +138,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                   ),
                   //student list
-                  for (int i = 0; i < numStudents; i++)
-                  Column( children: [
-                    ExerciseTile(names[i], i.toString(), i),
-                    SizedBox(
-                    height: 15,
-                    )
-                  ]
-                  )
+                  Column ( children: [
+                  for (int i = 0; i < (numStudents/3).ceil(); i++)
+                  Wrap(children : [
+                    Row( children: [
+                      for (int j = i*3; j < i*3+3; j++)
+                        if (j < names.length)
+                          Wrap( children: [
+                            ExerciseTile(names[j], j.toString(), j),
+                            const SizedBox(width: 15),
+                          ]),
+                      ]),
+                      const SizedBox(height: 90)
+                    ]),
+                  ]),
                 ]),
               ),
             ),
@@ -170,8 +179,21 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          for (int i = 0; i < numStudents; i++)
-            ChildDisplay(names[i], DisplayType.HeartRate)
+                    Column (mainAxisAlignment: MainAxisAlignment.center, children: [
+                  for (int i = 0; i < (numStudents/3).ceil(); i++)
+                  Wrap(children : [
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      for (int j = i*3; j < i*3+3; j++)
+                        if (j < names.length)
+                          Wrap( children: [
+                            ChildDisplay(names[j], DisplayType.HeartRate),
+                            if (j != i*3+2 || j < names.length)
+                              const SizedBox(width: 40),
+                          ]),
+                      ]),
+                      const SizedBox(height: 150)
+                    ]),
+          ])
         ],
         ),
       ),
@@ -195,8 +217,21 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          for (int i = 0; i < numStudents; i++)
-            ChildDisplay(names[i], DisplayType.SkinTemp)
+                    Column (mainAxisAlignment: MainAxisAlignment.center, children: [
+                  for (int i = 0; i < (numStudents/3).ceil(); i++)
+                  Wrap(children : [
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      for (int j = i*3; j < i*3+3; j++)
+                        if (j < names.length)
+                          Wrap( children: [
+                            ChildDisplay(names[j], DisplayType.SkinTemp),
+                            if (j != i*3+2)
+                              const SizedBox(width: 40),
+                          ]),
+                      ]),
+                      const SizedBox(height: 150)
+                    ]),
+          ])
         ],
         ),
       ),
@@ -240,8 +275,21 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          for (int i = 0; i < numStudents; i++)
-            ChildDisplay(names[i], DisplayType.Pulse)
+          Column (mainAxisAlignment: MainAxisAlignment.center, children: [
+                  for (int i = 0; i < (numStudents/3).ceil(); i++)
+                  Wrap(children : [
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      for (int j = i*3; j < i*3+3; j++)
+                        if (j < names.length)
+                          Wrap( children: [
+                            ChildDisplay(names[j], DisplayType.Pulse),
+                            if (j != i*3+2)
+                              const SizedBox(width: 40),
+                          ]),
+                      ]),
+                      const SizedBox(height: 150)
+                    ]),
+          ])
         ],
         ),
       ),
