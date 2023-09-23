@@ -25,7 +25,9 @@ class ExerciseTile extends StatelessWidget {
         alignment = Alignment.topRight;
         break;
     }
-    return Wrap(children: [ Container(
+    return Container(alignment: alignment,
+                    child:
+              Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -57,12 +59,11 @@ class ExerciseTile extends StatelessWidget {
                             color: Colors.grey,
                             fontSize: 14,
                           )),
+                      ],
+                      ),
                     ],
                     ),
-                    ]
-                  ),
-    )
-    ]
+                  )
     );
   }
 }
