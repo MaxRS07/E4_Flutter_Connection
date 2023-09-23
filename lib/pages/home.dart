@@ -138,19 +138,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                   ),
                   //student list
-                  Column (mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Column (children: [
                   for (int i = 0; i < (numStudents/3).ceil(); i++)
                   Wrap(children : [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Row(children: [
+                      const SizedBox(width: 8),
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ExerciseTile(names[j], i.toString(), ),
+                            ExerciseTile(names[j], i.toString()),
                             if (j != i*3+2)
-                              const SizedBox(width: 40),
+                              const SizedBox(width: 30),
                           ]),
                       ]),
-                      const SizedBox(height: 150)
+                      const SizedBox(height: 90)
                     ]),
           ])
                 ]),
