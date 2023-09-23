@@ -3,31 +3,14 @@ import 'package:flutter/material.dart';
 class ExerciseTile extends StatelessWidget {
   String StudentName = "";
   String DeviceID = "";
-  int nth = 0;
   
-  ExerciseTile(String studentname, String deviceid, int Nth, {super.key}) {
+  ExerciseTile(String studentname, String deviceid, {super.key}) {
     StudentName = studentname;
     DeviceID = deviceid;
-    nth = Nth;
   }
   @override
   Widget build(BuildContext context) {
-    int column = nth%3;
-    Alignment alignment = Alignment.topLeft;
-    switch (column) {
-      case 0:
-        alignment = Alignment.topLeft;
-        break;
-      case 1:
-        alignment = Alignment.topCenter;
-        break;
-      case 2:
-        alignment = Alignment.topRight;
-        break;
-    }
-    return Container(alignment: alignment,
-                    child:
-              Container(
+    return Wrap(children: [ Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -59,11 +42,12 @@ class ExerciseTile extends StatelessWidget {
                             color: Colors.grey,
                             fontSize: 14,
                           )),
-                      ],
-                      ),
                     ],
                     ),
-                  )
+                    ]
+                  ),
+    )
+    ]
     );
   }
 }
