@@ -7,6 +7,7 @@ import 'package:flutter_application_1/util/exercise_tile.dart';
 import 'package:flutter_application_1/util/DisplayUI.dart';
 import 'package:empatica_e4link/empatica.dart';
 
+
 // create a device manager that will handle method calls
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int ideal_number = 10;
   int ideal_number_2 = 15;
   
-  var names = <String> ["Patrick", "Fred", "David", "Max", "Aidan", "Eli", "Magnus"];
+  var names = <String> ["Harrie", "Patrick", "Fred", "David", "Max", "Aidan", "Eli", "Magnus"];
   int numStudents = 7;
   PageController pageController = PageController();
 
