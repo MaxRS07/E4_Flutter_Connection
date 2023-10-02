@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ffi';
-
+import 'package:flutter_application_1/util/BleSocket.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/util/emoticon_face.dart';
 import 'package:flutter_application_1/util/exercise_tile.dart';
 import 'package:flutter_application_1/util/DisplayUI.dart';
 import 'package:empatica_e4link/empatica.dart';
 
-
+// ignore_for_file: avoid_print
 // create a device manager that will handle method calls
 
 class HomeScreen extends StatefulWidget {
@@ -15,11 +15,21 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
+extension RegMatch on String {
+  bool checkWith(String regex) {
+    var reg = RegExp(regex);
+    return reg.hasMatch(this);
+  }
+}
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex =0;
   int ideal_number = 10;
   int ideal_number_2 = 15;
+  
+  String serverAdress = '';
+  String port = '';
+  String temp = '';
+  String temp2 = '';
   
   var names = <String> ["Harrie", "Patrick", "Fred", "David", "Max", "Aidan", "Eli", "Magnus"];
   int numStudents = 7;
@@ -30,29 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
     pageController.animateToPage(index, duration: Duration(milliseconds: 10),curve: Curves.easeIn);
+    print("hello world");
   }
 
   @override
   Widget build(BuildContext context) {
-    EmpaticaPlugin deviceManager = EmpaticaPlugin();
-
-  deviceManager.authenticateWithAPIKey('your api key goes ');
-
-// first listen to status events before trying to connect
-  deviceManager.statusEventSink?.listen((event) async {
-      switch (event.runtimeType) {
-        case UpdateStatus:
-          //the status of the device manager
-          print((event as UpdateStatus).status);
-          break;
-        case DiscoverDevice:
-          await deviceManager.connectDevice((event as DiscoverDevice).device);
-          break;
-      }
-    });
-
-// when status is READY we can start scanning for devices
-    deviceManager.startScanning();
     numStudents = names.length;
     return Scaffold(
       
@@ -296,14 +288,68 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         ),
       ),
-      )
-        ],
       ),
+      Container(
+          color:Colors.blue[100],
+          child: SafeArea(
+        child: Column(children: [
+          Padding(padding: EdgeInsets.all(15), child:
+          Text('Settings',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ),
+          SizedBox(
+            width: 200,
+            child:
+          TextField(
+        obscureText: false,
+        onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp = value : null;},
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Server Adress',
+          hintText: serverAdress,
+          
+        ),
+        ),
+          ),
+          SizedBox(height: 15),
+          SizedBox(
+            width: 200,
+            child:
+          TextField(
+        onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp2 = value : null;},
+        obscureText: false,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Server Port',
+          hintText: port,
+          
+        ),
+        ),
+          ),
+          SizedBox(height: 15),
+        ElevatedButton(
+    style: TextButton.styleFrom(
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.blue
+  ),
+  onPressed: () { serverAdress = temp; port = temp2;},
+  child: Text('Apply Changes'),
+)
+        ])
+          )
+      )
+          ]),
       bottomNavigationBar: BottomNavigationBar(items: const<BottomNavigationBarItem>[ 
         BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.favorite_outline),label: 'Heart Rate'),
         BottomNavigationBarItem(icon: Icon(Icons.health_and_safety),label: 'Skin Temperature'),
-        BottomNavigationBarItem(icon: Icon(Icons.medical_information),label: 'Pulses')
+        BottomNavigationBarItem(icon: Icon(Icons.medical_information),label: 'Pulses'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings),label: 'Settings')
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Colors.blue[900],
