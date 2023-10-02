@@ -6,6 +6,15 @@ import 'package:flutter_application_1/util/emoticon_face.dart';
 import 'package:flutter_application_1/util/exercise_tile.dart';
 import 'package:flutter_application_1/util/DisplayUI.dart';
 import 'package:empatica_e4link/empatica.dart';
+import 'dart:ffi';
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:core';
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:async/async.dart';
+import 'package:quiver/async.dart';
 
 // ignore_for_file: avoid_print
 // create a device manager that will handle method calls
@@ -40,11 +49,20 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
     pageController.animateToPage(index, duration: Duration(milliseconds: 10),curve: Curves.easeIn);
-    print("hello world");
+  }
+  Future<void> listenToStream() async {
+  print("listening");
+  final e4 = await E4Socket.connect('192.168.7.200', 12345);
+  final stream = e4.subscribeToMeasure('acc', E4Device('71e1cc'));
+  stream.listen((measure) {
+    //utf8.decode(data);
+    print({utf8.decode(measure.packet.data)});
+  });
   }
 
   @override
   Widget build(BuildContext context) {
+    listenToStream();
     numStudents = names.length;
     return Scaffold(
       
