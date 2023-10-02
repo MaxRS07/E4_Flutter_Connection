@@ -9,6 +9,13 @@ import 'package:async/async.dart';
 import 'package:quiver/async.dart';
 
 // ignore_for_file: avoid_print
+///acc - 3-axis acceleration
+///bvp - Blood Volume Pulse
+///gsr - Galvanic Skin Response
+///ibi - Interbeat Interval and Heartbeat
+///tmp - Skin Temperature
+///bat - Device Battery
+///tag - Tag taken from the device (by pressing the button)
 enum SubType {
   acc,
   bvp,
@@ -18,6 +25,9 @@ enum SubType {
   bat,
   tag,
 }
+var ids = {
+  "A03051" : "71e1cc",
+};
 extension E4Matter on String {
   String e4mat() {
     return this + "\r\n";
@@ -51,7 +61,6 @@ extension E4Matter on String {
     }
     return a;
   }
-  
 }
 extension EnumExtension on SubType {
   String getString() {
@@ -63,9 +72,7 @@ class E4Packet {
   final List<int> data;
   E4Packet(this.data);
   static E4Packet parse(String e) {
-
     return E4Packet(utf8.encode(e));
-    //throw UnimplementedError();
   }
   bool contains(String sub) {
     return true;
@@ -77,9 +84,9 @@ class E4Packet {
 }
 
 class E4Device {
-  final String btleAddr;
-
-  E4Device(this.btleAddr);
+  final String DeviceID;
+  late String btleAddr;
+  E4Device(this.DeviceID) {btleAddr = ids[DeviceID]!;}
 }
 
 class E4Measure {
@@ -87,6 +94,7 @@ class E4Measure {
   E4Measure(this.packet);
   static E4Measure parse(E4Packet e) {
     return E4Measure(e);
+
     //throw UnimplementedError();
   }
 }

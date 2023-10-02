@@ -39,30 +39,22 @@ class _HomeScreenState extends State<HomeScreen> {
   String port = '';
   String temp = '';
   String temp2 = '';
+
+  String data = "";
   
-  var names = <String> ["Harrie", "Patrick", "Fred", "David", "Max", "Aidan", "Eli", "Magnus"];
-  int numStudents = 7;
+  var names = <String> ["Student1"];
+  int numStudents = 1;
   PageController pageController = PageController();
+
 
   void onTapped(int index){
     setState(() {
       _selectedIndex = index;
     });
-    pageController.animateToPage(index, duration: Duration(milliseconds: 10),curve: Curves.easeIn);
+    pageController.animateToPage(index, duration: Duration(milliseconds: 10),curve: Curves.bounceInOut);
   }
-  Future<void> listenToStream() async {
-  print("listening");
-  final e4 = await E4Socket.connect('192.168.7.200', 12345);
-  final stream = e4.subscribeToMeasure('acc', E4Device('71e1cc'));
-  stream.listen((measure) {
-    //utf8.decode(data);
-    print({utf8.decode(measure.packet.data)});
-  });
-  }
-
   @override
   Widget build(BuildContext context) {
-    listenToStream();
     numStudents = names.length;
     return Scaffold(
       
@@ -181,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
-            Text('Heart Rate Details',
+            Text("Heart Rate Details",
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
@@ -199,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], DisplayType.HeartRate),
+                            ChildDisplay(names[j], SubType.ibi),
                             if (j != i*3+2 || j < names.length)
                               const SizedBox(width: 40),
                           ]),
@@ -237,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], DisplayType.SkinTemp),
+                            ChildDisplay(names[j], SubType.tmp),
                             if (j != i*3+2)
                               const SizedBox(width: 40),
                           ]),
@@ -295,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], DisplayType.Pulse),
+                            ChildDisplay(names[j], SubType.bvp),
                             if (j != i*3+2)
                               const SizedBox(width: 40),
                           ]),
