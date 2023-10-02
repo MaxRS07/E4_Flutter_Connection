@@ -60,16 +60,19 @@ extension EnumExtension on SubType {
 }
 
 class E4Packet {
+  final List<int> data;
+  E4Packet(this.data);
   static E4Packet parse(String e) {
-    throw UnimplementedError();
-  }
 
+    return E4Packet(utf8.encode(e));
+    //throw UnimplementedError();
+  }
   bool contains(String sub) {
-    throw UnimplementedError();
+    return true;
   }
 
   bool isSysMessage() {
-    throw UnimplementedError();
+    return false;
   }
 }
 
@@ -80,14 +83,18 @@ class E4Device {
 }
 
 class E4Measure {
-  static E4Measure parse(E4Packet pkt) {
-    throw UnimplementedError();
+  final E4Packet packet;
+  E4Measure(this.packet);
+  static E4Measure parse(E4Packet e) {
+    return E4Measure(e);
+    //throw UnimplementedError();
   }
 }
 
 class E4Error implements Exception {
   static E4Error from(E4Packet pkt) {
-    throw UnimplementedError();
+    //throw UnimplementedError();
+    return E4Error();
   }
 }
 
@@ -116,7 +123,8 @@ class E4Socket {
   }
 
   Stream<E4Measure> subscribeToMeasure(String measureKind, E4Device device) {
-    _tx.writeln("device_connect ${device.btleAddr}");
+    _tx.write("device_connect ${device.btleAddr}" + "\r\n");
+    _tx.write("device_subscribe $measureKind ON" + "\r\n");
     final response = _rx.next;
     response.then((r) {
       if (r.contains("OK")) {
@@ -133,11 +141,4 @@ class E4Socket {
     _ctrl.close();
     _tx.close();
   }
-}
-Future<void> main(List<String> arguments) async {
-  final e4 = await E4Socket.connect('192.168.7.200', 12345);
-  final stream = e4.subscribeToMeasure('gsr', E4Device('11:22:33:44'));
-  stream.listen((event) {
-    print("Received data : $event");
-  });
 }
