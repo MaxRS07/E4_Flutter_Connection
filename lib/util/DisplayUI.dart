@@ -18,14 +18,28 @@ import 'package:quiver/async.dart';
 
 
 
-class ChildDisplay extends StatelessWidget {
+class ChildDisplay extends StatefulWidget {
+    
+    late SubType type;
+    late String name;
+    ChildDisplay(String _name, SubType _type, {super.key}) {
+      name = _name;
+      type = _type;
+    }
+    @override
+    // ignore: no_logic_in_create_state
+    State<ChildDisplay> createState() => DisplayState(name, type, E4Socket.connect('192.168.7.200', 12345));
+    }
+class DisplayState extends State<ChildDisplay> {
     String StudentName = "";
-    SubType Type = SubType.gsr;
+    late SubType Type;
     int ideal_number = 10;
+    late Future<E4Socket> socket;
     String data = "data";
-    ChildDisplay(String studentName, SubType type, {super.key}) {
+    DisplayState(String studentName, SubType type, Future<E4Socket> _socket) {
       this.StudentName = studentName;
       Type = type;
+      socket = _socket;
     }
     String getType() {
       switch (Type) {
@@ -39,40 +53,45 @@ class ChildDisplay extends StatelessWidget {
           return "other";
       }
     }
-      Future<void> listenToStream() async {
-    final e4 = await E4Socket.connect('192.168.7.200', 12345);
-    final stream = e4.subscribeToMeasure(Type.getString(), E4Device('A03051'));
+    Future<void> listenToStream() async {
+    var _socket = await socket;
+    final stream = _socket.subscribeToMeasure(Type.getString(), E4Device('A03051'));
     stream.listen((measure) {
-      print(utf8.decode(measure.packet.data).split(" "));
-      data = utf8.decode(measure.packet.data);
+      print(utf8.decode(measure.packet.data));
+      setState(() => data = utf8.decode(measure.packet.data));
     });
     }
     @override
     Widget build(BuildContext context) {
       listenToStream();
+      if (double.tryParse(data.split(" ").last) == null) {
+        data = "waiting...";
+      } else {
+        data = data;
+      }
             return Column(
             children: [ 
             Text(
             StudentName,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
               ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          CircularProgressIndicator(
-              value: 5/ideal_number, //change to variables input/ideal
+          const CircularProgressIndicator(
+              value: 5/10, //change to variables input/ideal
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          Text(data),
-          SizedBox(
+          Text("${data.split(", ").last}°C"),
+          const SizedBox(
             height: 15,
           ),
           ]);
-}
+    }
 }

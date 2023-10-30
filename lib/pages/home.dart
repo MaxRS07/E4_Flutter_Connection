@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    pageController.animateToPage(index, duration: Duration(milliseconds: 10),curve: Curves.bounceInOut);
+    pageController.animateToPage(index, duration: const Duration(milliseconds: 10),curve: Curves.bounceInOut);
   }
   @override
   Widget build(BuildContext context) {
@@ -117,12 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
           ),*/
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               color: Colors.grey[400],
               child: Center(
                 child: Column(
@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[100],
           child: SafeArea(
         child: Column(children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
                     Column (mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], SubType.ibi),
+                            ChildDisplay("Student", SubType.bvp),
                             if (j != i*3+2 || j < names.length)
                               const SizedBox(width: 40),
                           ]),
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[100],
           child: SafeArea(
         child: Column(children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
                     Column (mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], SubType.tmp),
+                            ChildDisplay("Student", SubType.tmp),
                             if (j != i*3+2)
                               const SizedBox(width: 40),
                           ]),
@@ -265,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[100],
           child: SafeArea(
         child: Column(children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             //Hi Jared
@@ -277,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Column (mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (int j = i*3; j < i*3+3; j++)
                         if (j < names.length)
                           Wrap( children: [
-                            ChildDisplay(names[j], SubType.bvp),
+                            ChildDisplay("Student", SubType.ibi),
                             if (j != i*3+2)
                               const SizedBox(width: 40),
                           ]),
@@ -303,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color:Colors.blue[100],
           child: SafeArea(
         child: Column(children: [
-          Padding(padding: EdgeInsets.all(15), child:
+          const Padding(padding: EdgeInsets.all(15), child:
           Text('Settings',
             style: TextStyle(
               color: Colors.black,
@@ -319,14 +319,14 @@ class _HomeScreenState extends State<HomeScreen> {
         obscureText: false,
         onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp = value : null;},
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           labelText: 'Server Adress',
           hintText: serverAdress,
           
         ),
         ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           SizedBox(
             width: 200,
             child:
@@ -334,21 +334,21 @@ class _HomeScreenState extends State<HomeScreen> {
         onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp2 = value : null;},
         obscureText: false,
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           labelText: 'Server Port',
           hintText: port,
           
         ),
         ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ElevatedButton(
     style: TextButton.styleFrom(
     foregroundColor: Colors.white,
     backgroundColor: Colors.blue
   ),
   onPressed: () { serverAdress = temp; port = temp2;},
-  child: Text('Apply Changes'),
+  child: const Text('Apply Changes'),
 )
         ])
           )
