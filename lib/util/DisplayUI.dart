@@ -20,7 +20,6 @@ import 'Names.dart';
 
 
 class ChildDisplay extends StatefulWidget {
-    
     late SubType type;
     late String id;
     late String host;
@@ -56,6 +55,7 @@ class DisplayState extends State<ChildDisplay> {
     late Future<E4Socket> socket;
     late String address;
     late int port;
+    String unit = "";
 
     String name = "Unnamed";
     DisplayState(String _id, SubType type, String Address, int Port) {
@@ -63,7 +63,12 @@ class DisplayState extends State<ChildDisplay> {
       Type = type;
       address = Address;
       port = Port;
-      name = names[id.toLowerCase()] ?? name; 
+      name = names[id.toLowerCase()] ?? name;
+      switch (type) {
+        case SubType.tmp:
+          unit = "°C";
+          break;
+      }
     }
 
     String data = "Waiting...";
@@ -79,14 +84,14 @@ class DisplayState extends State<ChildDisplay> {
     void updateData(measure) {
         var a = utf8.decode(measure.packet.data);
         if (double.tryParse(a.split(' ').last) != null) {
-        setState(() => data = utf8.decode(measure.packet.data));
+        setState(() => data = utf8.decode(measure.packet.data).split(' ').last + unit);
         }
       }
     @override
-    void deactivate() {
+    void dispose() {
       // close socket i guess
       socket.then((value) => value.close());
-      super.deactivate();
+      super.dispose();
     }
 
     @override
@@ -106,7 +111,7 @@ class DisplayState extends State<ChildDisplay> {
         Column(children: [ Text(name),
         const SizedBox(height: 15),
         const Icon(Icons.health_and_safety_rounded),
-        Text("${data.split(' ').last}°C"),
+        Text(data),
         const SizedBox(height: 15),
         ]),
         )

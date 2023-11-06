@@ -16,8 +16,15 @@ class ExerciseTile extends StatefulWidget {
   
   class ExerciseState extends State<ExerciseTile> {
   late String studentName = "Unnamed";
+  late String id = "";
+
+  bool _isEditingText = false;
+  String initialText = "Initial Text";
+  late TextEditingController _editingController = TextEditingController(text: initialText);
+
   ExerciseState(String _id){
     studentName = names[_id.toLowerCase()] ?? studentName;
+    id = ids[_id.toLowerCase()] ?? _id;
   }
 
   @override
@@ -30,7 +37,7 @@ class ExerciseTile extends StatefulWidget {
                       
                       ),
                     height: 72,
-                    width: 225,
+                    width: 240,
                     child: Row(children: [
                       const Icon(Icons.favorite),
                       const SizedBox(
@@ -39,16 +46,24 @@ class ExerciseTile extends StatefulWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Text(
-                          studentName,
+                        Row( children: [
+                        EditableText(
+                          controller: _editingController,
+                          focusNode: FocusNode(),
+                          cursorColor: Colors.black12,
+                          backgroundCursorColor: Colors.black12,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                          ),),
+                          ),
+                          onEditingComplete: (){},
+                          ),
+                        ]
+                        ),
                           const SizedBox(
                           height: 5,
                           ),
-                        Text(widget.id,
+                        Text(id,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,

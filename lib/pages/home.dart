@@ -16,8 +16,6 @@ import 'dart:typed_data';
 import 'package:async/async.dart';
 import 'package:quiver/async.dart';
 
-// ignore_for_file: avoid_print
-// create a device manager that will handle method calls
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String temp = '';
   String temp2 = '';
 
-  List<String> device_IDs = [];
+  List<String> device_IDs = ["71e1cc"];
 
   PageController pageController = PageController();
 
