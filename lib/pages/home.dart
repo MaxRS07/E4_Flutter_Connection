@@ -31,31 +31,74 @@ extension RegMatch on String {
   }
 }
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex =0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late Future<E4Socket> socket;
+  @override
+  void initState() {
+    super.initState();
+    updateData();
+  }
+  void updateData() { 
+    socket = E4Socket.connect(serverAdress, port);
+    socket.then((a) 
+    {
+        a.getDevices().listen((value) {
+        setState(() => device_IDs = utf8.decode(value.packet.data).getDeviceList()); 
+        a.close();
+        });
+      }
+    );
+  }
+  int _selectedIndex = 0;
   int ideal_number = 10;
   int ideal_number_2 = 15;
-  
-  String serverAdress = '';
-  String port = '';
+
+  String serverAdress = '192.168.7.200';
+  int port = 12345;
   String temp = '';
   String temp2 = '';
 
-  String data = "";
-  
-  var names = <String> ["Student1"];
-  int numStudents = 1;
+  List<String> device_IDs = [];
+
   PageController pageController = PageController();
 
-
+  String setValues() {
+    if (temp == "" && temp2 == "") {
+      return "";
+    }
+    if (temp2.checkWith('^[1-9][0-9]{4}\$') && temp.checkWith('^([0-9]{1,3}[.]){3}([0-9]{1,3})\$')) {
+      port = int.parse(temp2);
+      serverAdress = temp;
+      return "$serverAdress:$port";
+    } else if (!temp2.checkWith('^[1-9][0-9]{4}\$')) {
+      return "Invalid Port";
+    } else {
+      return "Invalid Address";
+    }
+  }
+  List<Widget> listChildDisplays(SubType type) {
+    List<Widget> lidget = List.empty(growable: true);
+    for (String a in device_IDs) {
+      lidget.add(ChildDisplay(a, type, serverAdress, port));
+    }
+    print(lidget);
+    return lidget;
+  }
+  List<Widget> listExerciseTiles() {
+    List<Widget> lidget = List.empty(growable: true);
+    for (String a in device_IDs) {
+      lidget.add(ExerciseTile(a));
+    }
+    print(lidget);
+    return lidget;
+  }
   void onTapped(int index){
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
     pageController.animateToPage(index, duration: const Duration(milliseconds: 10),curve: Curves.bounceInOut);
   }
   @override
   Widget build(BuildContext context) {
-    numStudents = names.length;
     return Scaffold(
       
       body: PageView(
@@ -141,28 +184,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                   ),
                   //student list
-                  Column (children: [
-                  for (int i = 0; i < (numStudents/3).ceil(); i++)
-                  Wrap(children : [
-                    Row(children: [
-                      const SizedBox(width: 8),
-                      for (int j = i*3; j < i*3+3; j++)
-                        if (j < names.length)
-                          Wrap( children: [
-                            ExerciseTile(names[j], i.toString()),
-                            if (j != i*3+2)
-                              const SizedBox(width: 30),
-                          ]),
-                      ]),
-                      const SizedBox(height: 90)
-                    ]),
-          ])
+                  Expanded(child:
+                    GridView.count(
+                      primary: false,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      children: listExerciseTiles()
+                  ),
+                    )
                 ]),
               ),
             ),
           ),
+          Container(
+            color: Colors.grey[400],
+                    alignment: Alignment.bottomRight,
+                    child:
+                    Padding(
+                      padding: EdgeInsets.all(10), 
+                      child:
+                      FloatingActionButton(
+                    onPressed: (){updateData();},
+                    tooltip: 'Refresh',
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                    child: const Icon(Icons.refresh)),
+                  ),
+          )
         ],
         ),
+        
       ),
                 ),
           Container(
@@ -184,21 +236,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 20,
           ),
-                    Column (mainAxisAlignment: MainAxisAlignment.center, children: [
-                  for (int i = 0; i < (numStudents/3).ceil(); i++)
-                  Wrap(children : [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      for (int j = i*3; j < i*3+3; j++)
-                        if (j < names.length)
-                          Wrap( children: [
-                            ChildDisplay("Student", SubType.bvp),
-                            if (j != i*3+2 || j < names.length)
-                              const SizedBox(width: 40),
-                          ]),
-                      ]),
-                      const SizedBox(height: 150)
-                    ]),
-          ])
+          Expanded(child:
+          GridView.count(
+            primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 2,
+            children: listChildDisplays(SubType.ibi)
+        ),
+          )
         ],
         ),
       ),
@@ -222,21 +269,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 20,
           ),
-                    Column (mainAxisAlignment: MainAxisAlignment.center, children: [
-                  for (int i = 0; i < (numStudents/3).ceil(); i++)
-                  Wrap(children : [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      for (int j = i*3; j < i*3+3; j++)
-                        if (j < names.length)
-                          Wrap( children: [
-                            ChildDisplay("Student", SubType.tmp),
-                            if (j != i*3+2)
-                              const SizedBox(width: 40),
-                          ]),
-                      ]),
-                      const SizedBox(height: 150)
-                    ]),
-          ])
+          Expanded(child:
+          GridView.count(
+            primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 2,
+            children: listChildDisplays(SubType.tmp)
+        ),
+          )
         ],
         ),
       ),
@@ -280,21 +322,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 20,
           ),
-          Column (mainAxisAlignment: MainAxisAlignment.center, children: [
-                  for (int i = 0; i < (numStudents/3).ceil(); i++)
-                  Wrap(children : [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      for (int j = i*3; j < i*3+3; j++)
-                        if (j < names.length)
-                          Wrap( children: [
-                            ChildDisplay("Student", SubType.ibi),
-                            if (j != i*3+2)
-                              const SizedBox(width: 40),
-                          ]),
-                      ]),
-                      const SizedBox(height: 150)
-                    ]),
-          ])
+          Expanded(child:
+          GridView.count(
+            primary: false,
+            padding: const EdgeInsets.all(20),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 3,
+            children: listChildDisplays(SubType.bvp)
+        ),
+          )
         ],
         ),
       ),
@@ -317,11 +354,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child:
           TextField(
         obscureText: false,
-        onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp = value : null;},
+        onChanged: (value) {temp = value;},
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: 'Server Adress',
-          hintText: serverAdress,
+          hintText: serverAdress == "" ? "IPV4" : serverAdress,
           
         ),
         ),
@@ -331,12 +368,12 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 200,
             child:
           TextField(
-        onChanged: (value) {value.checkWith('^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\$') ? temp2 = value : null;},
+        onChanged: (value) {temp2 = value;},
         obscureText: false,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: 'Server Port',
-          hintText: port,
+          hintText: port.toString(),
           
         ),
         ),
@@ -345,11 +382,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ElevatedButton(
     style: TextButton.styleFrom(
     foregroundColor: Colors.white,
-    backgroundColor: Colors.blue
+    backgroundColor: Colors.blue,
   ),
-  onPressed: () { serverAdress = temp; port = temp2;},
+  onPressed: (){setValues(); setState(() {
+    
+  });},
   child: const Text('Apply Changes'),
-)
+),
+Text(setValues())
         ])
           )
       )

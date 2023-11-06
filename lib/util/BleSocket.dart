@@ -25,15 +25,12 @@ enum SubType {
   bat,
   tag,
 }
-var ids = {
-  "A03051" : "71e1cc",
-};
 extension E4Matter on String {
   String e4mat() {
     return this + "\r\n";
   }
-  List<dynamic> getDeviceList() {
-    List a = [];
+  List<String> getDeviceList() {
+    List<String> a = [];
     String num_device = "";
     for (int i = 0; i < this.length; i++) {
       if (int.tryParse(this[i]) != null) {
@@ -86,7 +83,7 @@ class E4Packet {
 class E4Device {
   final String DeviceID;
   late String btleAddr;
-  E4Device(this.DeviceID) {btleAddr = ids[DeviceID]!;}
+  E4Device(this.DeviceID) {btleAddr = DeviceID;}
 }
 
 class E4Measure {
@@ -125,8 +122,8 @@ class E4Socket {
     _rx = StreamQueue(router.defaultStream);
   }
 
-  static Future<E4Socket> connect(String host, int port) async {
-    final socket = await Socket.connect(host, port);
+  static Future<E4Socket> connect(String _host, int _port) async {
+    final socket = await Socket.connect(_host, _port);
     return E4Socket._(socket);
   }
 
@@ -143,7 +140,17 @@ class E4Socket {
     });
     return _ctrl.stream;
   }
+  Stream<E4Measure> getDevices() {
 
+    _tx.write("device_list".e4mat());
+    _tx.write("device_list".e4mat());
+
+    final response = _rx.next;
+    response.then((value) {
+        _ctrl.addStream(_rx.rest.map((pkt) => E4Measure.parse(pkt)));
+    });
+    return _ctrl.stream;
+  }
   void close() {
     _sysMsgSub.cancel();
     _ctrl.close();

@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/util/BleSocket.dart';
+import 'Names.dart';
 
-class ExerciseTile extends StatelessWidget {
-  String StudentName = "";
-  String DeviceID = "";
+class ExerciseTile extends StatefulWidget {
+    
+    late String id;
+
+    ExerciseTile(String _id) {
+      id = _id;
+    }
+    @override
+    // ignore: no_logic_in_create_state
+    State<ExerciseTile> createState() => ExerciseState(id);
+    }
   
-  ExerciseTile(String studentname, String deviceid, {super.key}) {
-    StudentName = studentname;
-    DeviceID = deviceid;
+  class ExerciseState extends State<ExerciseTile> {
+  late String studentName = "Unnamed";
+  ExerciseState(String _id){
+    studentName = names[_id.toLowerCase()] ?? studentName;
   }
+
   @override
   Widget build(BuildContext context) {
     return Wrap(children: [ Container(
@@ -28,7 +40,7 @@ class ExerciseTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                         Text(
-                          StudentName,
+                          studentName,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -36,7 +48,7 @@ class ExerciseTile extends StatelessWidget {
                           const SizedBox(
                           height: 5,
                           ),
-                        Text(DeviceID,
+                        Text(widget.id,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
